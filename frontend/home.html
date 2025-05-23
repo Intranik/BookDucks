@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <title>Visa bok från Strapi</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+  <h1>Min bok</h1>
+  <div id="bok-info">
+    Laddar...
+  </div>
+
+  <script>
+    // Byt till rätt ID här – ID 2 existerar enligt din data
+    const bokId = 2;
+
+    let s =   fetch(`http://localhost:1337/api/books/`)
+    console.log(s);
+    
+      // .then(response => {
+      //   const bok = response.data.data;
+      //   const attrs = bok.attributes || bok; // om du inte har "attributes" i din respons
+
+      //   const html = `
+      //     <h2>${attrs.titel}</h2>
+      //     <p><strong>Författare:</strong> ${attrs.author}</p>
+      //     <p><strong>Antal sidor:</strong> ${attrs.pages}</p>
+      //     <p><strong>Publiceringsdatum:</strong> ${attrs.date}</p>
+      //   `;
+
+      //   document.getElementById('bok-info').innerHTML = html;
+      // })
+      // .catch(error => {
+      //   console.error('Fel vid hämtning:', error);
+      //   document.getElementById('bok-info').innerHTML = 'Kunde inte hämta bok.';
+      // });
+  </script>
+</body>
+</html>
