@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "toreadlists",
+  "info": {
+    "singularName": "toreadlist",
+    "pluralName": "toreadlists",
+    "displayName": "toreadlist",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "book": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::book.book",
+      "inversedBy": "toreadlists"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "toreadlists"
+    }
+  }
+}
