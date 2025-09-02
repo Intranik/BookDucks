@@ -41,16 +41,24 @@
         "audios"
       ]
     },
-    "Rating": {
-      "type": "integer",
-      "required": false,
-      "min": 1,
-      "max": 10
-    },
     "uid": {
       "type": "uid",
       "targetField": "titel",
       "required": true
+    },
+    "theme": {
+      "type": "enumeration",
+      "enum": [
+        "light",
+        "dark",
+        "blue"
+      ]
+    },
+    "toreadlists": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::toreadlist.toreadlist",
+      "mappedBy": "book"
     }
   }
 }
