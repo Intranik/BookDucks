@@ -73,7 +73,7 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::toreadlist.toreadlist",
-      "mappedBy": "user"
+      "mappedBy": "users_permissions_user"
     }
   }
 }

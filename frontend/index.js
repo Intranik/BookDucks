@@ -12,39 +12,6 @@ async function fetchBooksFromStrapi() {
     console.error('❌ Fel vid hämtning:', err);
   }
 }
-
-// let toreadlistData = []; // Global array
-
-// async function fetchToreadlist() {
-//   const user = JSON.parse(localStorage.getItem("user"));
-//   const jwt = localStorage.getItem("jwt");
-
-//   if (!user || !jwt) {
-//     console.log("⚠️ Du måste vara inloggad för att se toreadlist.");
-//     return;
-//   }
-
-//   try {
-//     const res = await fetch("http://localhost:1337/api/toreadlists?populate[users_permissions_user]=*&populate[book]=*", {
-//       headers: {
-//         "Authorization": `Bearer ${jwt}`
-//       }
-//     });
-//     const data = await res.json();
-//     console.log(data);
-//     // Spara i array
-//     toreadlistData = result.data || [];
-
-//     // Logga arrayen
-//     console.log("Toreadlist för inloggad användare:", toreadlistData);
-//   } catch (err) {
-//     console.error("❌ Fel vid hämtning av toreadlist:", err);
-//   }
-// }
-
-// // Kör funktionen
-// fetchToreadlist();
-
 // Array för att spara toreadlists
 let toReadLists = [];
 
@@ -52,7 +19,7 @@ let toReadLists = [];
 const jwt = localStorage.getItem("jwt"); // t.ex. "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 
 async function fetchToreadlists() {
-  const url = "http://localhost:1337/api/toreadlists?populate[user][fields][0]=id&populate[user][fields][1]=username&populate[user][fields][2]=email";
+  const url = "http://localhost:1337/api/toreadlists?populate=*";
 
   try {
     const res = await fetch(url, {
@@ -75,12 +42,8 @@ async function fetchToreadlists() {
     console.error("❌ Kunde inte hämta toreadlists:", err);
   }
 }
-
 // Kör funktionen
 fetchToreadlists();
-
-
-
 
 function renderBooks() {
   const bookList = document.getElementById('book-container');
@@ -128,47 +91,42 @@ function renderBooks() {
   // Event listener för knapparna
   document.querySelectorAll('.add-to-list-btn').forEach(btn => {
     btn.addEventListener('click', async (e) => {
-  const bookId = e.target.dataset.id;
-
-  if (!jwt || !user) {
-    alert("Du måste logga in för att spara böcker.");
-    return;
-  }
-
-  try {
-    // Kolla först om boken redan finns i listan
-    const existing = await axios.get(
-     `http://localhost:1337/api/toreadlists?filters[users_permissions_user][id][$eq]=${user.id}&filters[book][id][$eq]=${bookId}`,
-      { headers: { Authorization: `Bearer ${jwt}` } }
-    );
-
-    if (existing.data.data.length > 0) {
-      return alert("⚠️ Boken finns redan i din lista!");
-    }
-
-    // Lägg till i Strapi
-     await axios.post("http://localhost:1337/api/toreadlists",
-    {
-      data: {
-        users_permissions_user: user.id,  // rätt namn på relationen
-        book: bookId                      // relation till boken
+      const bookId = e.target.dataset.id;
+      if (!jwt || !user) {
+        alert("Du måste logga in för att spara böcker.");
+        return;
       }
-    },
-    { headers: { Authorization: `Bearer ${jwt}` } }
-    );
+    
+      try {
+        // Kolla först om boken redan finns i listan
+        const existing = await axios.get(
+         `http://localhost:1337/api/toreadlists?filters[users_permissions_user][id][$eq]=${user.id}&filters[book][id][$eq]=${bookId}`,
+          { headers: { Authorization: `Bearer ${jwt}` } }
+        );
+      
+        if (existing.data.data.length > 0) {
+          return alert("⚠️ Boken finns redan i din lista!");
+        }
+      
+        // Lägg till i Strapi
+         await axios.post("http://localhost:1337/api/toreadlists",
+        {
+          data: { 
+            users_permissions_user: user.id,  // rätt namn på relationen
+            book: bookId                      // relation till boken
+          }
+        },
+        { headers: { Authorization: `Bearer ${jwt}` } }
+        );
 
-
-    alert("📚 Bok sparad i din lista!");
-  } catch (err) {
-    console.error("❌ Kunde inte spara bok:", err.response?.data || err);
-    alert("Fel vid sparande.");
-  }
-});
+        alert("📚 Bok sparad i din lista!");
+      } catch (err) {
+        console.error("❌ Kunde inte spara bok:", err.response?.data || err);
+        alert("Fel vid sparande.");
+      }
+   });
   });
+  
 }
 
-
-
 fetchBooksFromStrapi();
-
-
